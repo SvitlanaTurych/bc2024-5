@@ -35,6 +35,15 @@ app.put('/notes/:name', (req, res) => {
   res.sendStatus(200);
 });
 
+app.delete('/notes/:name', (req, res) => {
+  const notePath = path.join(options.cache, `${req.params.name}.txt`);
+  if (!fs.existsSync(notePath)) {
+    return res.status(404).send('Not found');
+  }
+  fs.unlinkSync(notePath);
+  res.sendStatus(200);
+});
+
 app.listen(options.port, options.host, () => {
   console.log(`Server running at http://${options.host}:${options.port}/`);
 });
