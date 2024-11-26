@@ -44,6 +44,17 @@ app.delete('/notes/:name', (req, res) => {
   res.sendStatus(200);
 });
 
+app.get('/notes', (req, res) => {
+  const files = fs.readdirSync(options.cache);
+  const notes = files.map(file => {
+    const name = path.basename(file);
+    const text = fs.readFileSync(path.join(options.cache, file), 'utf-8');
+    return { name, text };
+  });
+  res.status(200).json(notes);
+});
+
+
 app.listen(options.port, options.host, () => {
   console.log(`Server running at http://${options.host}:${options.port}/`);
 });
